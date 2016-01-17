@@ -7,6 +7,13 @@
 <h1>Contact</h1>
 
 <form method="post">
+    @if (ViewBag.Message != null)
+    {
+        <div>
+            @ViewBag.Message
+        </div>
+    }
+
     @Html.LabelFor(m => m.Name)
     @Html.TextBoxFor(m => m.Name)
     @Html.ValidationMessageFor(m => m.Name)
