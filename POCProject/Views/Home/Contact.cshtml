@@ -1,0 +1,23 @@
+﻿@model POCProject.ViewModels.ContactViewModel
+
+@section Scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+<h1>Contact</h1>
+
+<form method="post">
+    @Html.LabelFor(m => m.Name)
+    @Html.TextBoxFor(m => m.Name)
+    @Html.ValidationMessageFor(m => m.Name)
+
+    @Html.LabelFor(m => m.Email)
+    @Html.TextBoxFor(m => m.Email)
+
+    @Html.LabelFor(m => m.Message)
+    @Html.TextAreaFor(m => m.Message)
+
+    <div>
+        <input type="submit" value="Send" />
+    </div>
+</form>
