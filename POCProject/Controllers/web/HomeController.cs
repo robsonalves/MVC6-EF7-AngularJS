@@ -1,20 +1,26 @@
 ﻿using Microsoft.AspNet.Mvc;
+using POCProject.Model;
 using POCProject.Services;
 using POCProject.ViewModels;
+using System.Linq;
 
 namespace POCProject.Controllers.web
 {
     public class HomeController : Controller
     {
         private IMailService _mailService;
+        private WorldContext _context;
 
-        public HomeController(IMailService service)
+        public HomeController(IMailService service, WorldContext context)
         {
             _mailService = service;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            var trips = _context.Trips.OrderBy(t => t.Name).ToList();
+
             return View();
         }
 
@@ -40,7 +46,7 @@ namespace POCProject.Controllers.web
                     ModelState.AddModelError("", "Could not send email, configuration is not found.");
                 }
 
-                if(_mailService.sendMail(email, email,
+                if (_mailService.sendMail(email, email,
                     $"Contact Page From {contact.Name} ({contact.Email})",
                     contact.Message))
                 {
