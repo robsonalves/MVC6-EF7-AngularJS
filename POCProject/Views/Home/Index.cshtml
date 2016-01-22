@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<POCProject.Models.Trip>
 @{
     ViewBag.Title = "Robson Alves - Site";
 }
@@ -21,6 +21,12 @@
     </div>
 
     <div class="col-md-6">
-        The Map
+        <h2>The Map</h2>
+        <ul>
+            @foreach (var trip in Model)
+            {
+                <li>@trip.Name (@trip.Created.ToShortDateString())</li>
+            }
+        </ul>
     </div>
 </div>

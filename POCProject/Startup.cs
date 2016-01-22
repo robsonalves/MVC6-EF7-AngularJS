@@ -3,8 +3,11 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
-using POCProject.Model;
 using POCProject.Services;
+using Microsoft.Data.Entity;
+using POCProject.Model;
+using POCProject.Models;
+using Microsoft.Extensions.Logging;
 
 namespace POCProject
 {
@@ -27,21 +30,25 @@ namespace POCProject
         {
             services.AddMvc();
 
+            services.AddLogging();
+
             services.AddEntityFramework()
-                    .AddSqlServer()
-                    .AddDbContext<WorldContext>();
-                 
+                     .AddSqlServer()
+                     .AddDbContext<WorldContext>();
+
+            services.AddTransient<WorldContextSeedData>();
 
 #if DEBUG
-            services.AddScoped<IMailService, DebugMailService>();
+            services.AddTransient<IMailService, DebugMailService>();
 #else
             services.AddScope<IMailService, RealMailService>();
 #endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, WorldContextSeedData seeder, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddDebug(LogLevel.Information);
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             app.UseMvc(config =>
@@ -52,8 +59,7 @@ namespace POCProject
                     defaults: new { controller = "Home", action = "Index" }
                         );
             });
-
-
+            seeder.EnsureSeedData();
         }
 
         // Entry point for the application.

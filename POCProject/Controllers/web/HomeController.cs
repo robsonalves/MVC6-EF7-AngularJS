@@ -21,7 +21,7 @@ namespace POCProject.Controllers.web
         {
             var trips = _context.Trips.OrderBy(t => t.Name).ToList();
 
-            return View();
+            return View(trips);
         }
 
         public IActionResult About()
